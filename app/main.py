@@ -208,12 +208,30 @@ def main() -> None:
                 else:
                     print("Expediente creado y guardado.")
 
+        elif opcion == "5":
+            expediente_id = input("ID del expediente: ").strip()
+            nuevo_estado = input(
+                "Nuevo estado (abierto, en_progreso o cerrado): "
+            ).strip()
+
+            try:
+                cambiar_estado(expedientes, expediente_id, nuevo_estado)
+            except ValueError as error:
+                print(f"No se pudo cambiar el estado: {error}")
+            else:
+                try:
+                    guardar_expedientes(RUTA_DATOS, expedientes)
+                except OSError as error:
+                    print(f"No se pudieron guardar los cambios: {error}")
+                else:
+                    print("Estado actualizado y guardado.")
+
         elif opcion == "0":
             print("Hasta luego.")
             break
 
         else:
-            print("Opción no válida. Elige 1, 2, 3, 4 o 0.")
+            print("Opción no válida. Elige 0, 1, 2, 3, 4 o 5.")
 
 
 if __name__ == "__main__":
