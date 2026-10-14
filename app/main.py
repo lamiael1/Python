@@ -105,3 +105,29 @@ def cambiar_estado(
 
     # Actualizamos el registro encontrado.
     expediente["estado"] = nuevo_estado
+
+
+def mostrar_menu() -> None:
+    # Mostramos las operaciones disponibles en cada vuelta del programa.
+    print("\nGestor de expedientes")
+    print("1. Listar expedientes")
+    print("2. Buscar por ID")
+    print("3. Filtrar por estado o prioridad")
+    print("4. Crear expediente")
+    print("5. Cambiar estado")
+    print("0. Salir")
+
+def mostrar_expedientes(expedientes: list[dict[str, Any]]) -> None:
+    # Informamos cuando una búsqueda o un filtro no devuelve resultados.
+    if not expedientes:
+        print("No se encontraron expedientes.")
+        return
+    # Mostramos los datos principales de cada expediente.
+    for expediente in expedientes:
+        print(
+            f"{expediente.get('id', 'Sin ID')} | "
+            f"{expediente.get('prioridad', 'Sin prioridad')} | "
+            f"{expediente.get('estado', 'Sin estado')} | "
+            f"{expediente.get('titulo', 'Sin título')}"
+        )
+
