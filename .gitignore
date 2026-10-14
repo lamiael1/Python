@@ -1,5 +1,14 @@
+# Entorno virtual y caché de Python
 .venv/
 __pycache__/
-*.py
-*.pyc
+*.py[cod]
+
+# Secretos y configuración local
+.env
+
+# Ajustes personales del editor
 .vscode/
+
+# Archivos temporales del sistema
+.DS_Store
+Thumbs.db

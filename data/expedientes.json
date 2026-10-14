@@ -1,0 +1,82 @@
+[
+  {
+    "id": "EXP-001",
+    "titulo": "Actualización de datos de cliente",
+    "prioridad": "media",
+    "estado": "abierto",
+    "solicitante": "Ana López",
+    "fecha_creacion": "2026-10-01"
+  },
+  {
+    "id": "EXP-002",
+    "titulo": "Incidencia en la autenticación",
+    "prioridad": "alta",
+    "estado": "en_progreso",
+    "solicitante": "Carlos Ruiz",
+    "fecha_creacion": "2026-10-02"
+  },
+  {
+    "id": "EXP-003",
+    "titulo": "Solicitud de informe mensual",
+    "prioridad": "baja",
+    "estado": "cerrado",
+    "solicitante": "Marta Gil",
+    "fecha_creacion": "2026-10-02"
+  },
+  {
+    "id": "EXP-004",
+    "titulo": "Error en la carga de documentos",
+    "prioridad": "alta",
+    "estado": "abierto",
+    "solicitante": "Javier Moreno",
+    "fecha_creacion": "2026-10-03"
+  },
+  {
+    "id": "EXP-005",
+    "titulo": "Alta de nuevo proveedor",
+    "prioridad": "media",
+    "estado": "en_progreso",
+    "solicitante": "Lucía Pérez",
+    "fecha_creacion": "2026-10-03"
+  },
+  {
+    "id": "EXP-006",
+    "titulo": "Consulta sobre facturación",
+    "prioridad": "media",
+    "estado": "cerrado",
+    "solicitante": "Diego Sánchez",
+    "fecha_creacion": "2026-10-04"
+  },
+  {
+    "id": "EXP-007",
+    "titulo": "Permisos de acceso al portal",
+    "prioridad": "alta",
+    "estado": "en_progreso",
+    "solicitante": "Elena Martín",
+    "fecha_creacion": "2026-10-05"
+  },
+  {
+    "id": "EXP-008",
+    "titulo": "Petición de cambio de horario",
+    "prioridad": "baja",
+    "estado": "abierto",
+    "solicitante": "Pablo Torres",
+    "fecha_creacion": "2026-10-05"
+  },
+  {
+    "id": "EXP-009",
+    "titulo": "Revisión de contrato",
+    "prioridad": "alta",
+    "estado": "abierto",
+    "solicitante": "Sofía Navarro",
+    "fecha_creacion": "2026-10-06"
+  },
+  {
+    "id": "EXP-010",
+    "titulo": "Solicitud de baja de usuario",
+    "prioridad": "media",
+    "estado": "cerrado",
+    "solicitante": "Raúl Ortega",
+    "fecha_creacion": "2026-10-06"
+  }
+]
