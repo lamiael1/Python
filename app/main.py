@@ -144,15 +144,21 @@ def mostrar_expedientes(expedientes: list[dict[str, Any]]) -> None:
 
 
 def main() -> None:
-    # Cargamos los expedientes al iniciar el programa.
+    # Si el JSON está dañado, mantenemos el menú abierto,
+    # pero bloqueamos las operaciones que guardarían datos.
+    datos_guardables = True
+
     try:
         expedientes = cargar_expedientes(RUTA_DATOS)
     except FileNotFoundError:
-        print(f"No se encontró el archivo: {RUTA_DATOS}")
-        return
+        print("No se encontró el archivo de datos.")
+        print("Se iniciará con una lista vacía.")
+        expedientes = []
     except json.JSONDecodeError:
-        print(f"El archivo contiene JSON inválido: {RUTA_DATOS}")
-        return
+        print("El archivo de datos contiene JSON inválido.")
+        print("Corrige el archivo antes de crear o actualizar expedientes.")
+        expedientes = []
+        datos_guardables = False
 
     # Repetimos el menú hasta que el usuario elija salir.
     while True:
@@ -183,6 +189,10 @@ def main() -> None:
             mostrar_expedientes(resultados)
 
         elif opcion == "4":
+            if not datos_guardables:
+                print("No se puede crear: primero corrige el archivo JSON.")
+                continue
+
             nuevo_expediente = {
                 "id": input("ID: ").strip(),
                 "titulo": input("Título: ").strip(),
@@ -204,15 +214,25 @@ def main() -> None:
                 try:
                     guardar_expedientes(RUTA_DATOS, expedientes)
                 except OSError as error:
+                    expedientes.pop()
                     print(f"No se pudieron guardar los cambios: {error}")
                 else:
                     print("Expediente creado y guardado.")
 
         elif opcion == "5":
+            if not datos_guardables:
+                print("No se puede cambiar el estado: primero corrige el archivo JSON.")
+                continue
+
             expediente_id = input("ID del expediente: ").strip()
             nuevo_estado = input(
                 "Nuevo estado (abierto, en_progreso o cerrado): "
             ).strip()
+
+            expediente = buscar_por_id(expedientes, expediente_id)
+            estado_anterior = (
+                expediente.get("estado") if expediente is not None else None
+            )
 
             try:
                 cambiar_estado(expedientes, expediente_id, nuevo_estado)
@@ -222,6 +242,8 @@ def main() -> None:
                 try:
                     guardar_expedientes(RUTA_DATOS, expedientes)
                 except OSError as error:
+                    if expediente is not None:
+                        expediente["estado"] = estado_anterior
                     print(f"No se pudieron guardar los cambios: {error}")
                 else:
                     print("Estado actualizado y guardado.")
