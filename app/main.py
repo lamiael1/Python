@@ -63,6 +63,8 @@ def crear_expediente(
     titulo = nuevo_expediente.get("titulo", "").strip()
     prioridad = nuevo_expediente.get("prioridad", "").strip().lower()
     estado = nuevo_expediente.get("estado", "").strip().lower()
+    solicitante = nuevo_expediente.get("solicitante", "").strip()
+    fecha_creacion = nuevo_expediente.get("fecha_creacion", "").strip()
 
     if not expediente_id:
         raise ValueError("El ID es obligatorio.")
@@ -79,12 +81,21 @@ def crear_expediente(
     if estado not in ESTADOS_VALIDOS:
         raise ValueError("El estado debe ser abierto, en_progreso o cerrado.")
 
+    if not solicitante:
+        raise ValueError("El solicitante es obligatorio.")
+
+    if not fecha_creacion:
+        raise ValueError("La fecha de creación es obligatoria.")
+
     # Guardamos los valores ya normalizados en el nuevo expediente.
     nuevo_expediente["id"] = expediente_id
     nuevo_expediente["titulo"] = titulo
     nuevo_expediente["prioridad"] = prioridad
     nuevo_expediente["estado"] = estado
+    nuevo_expediente["solicitante"] = solicitante
+    nuevo_expediente["fecha_creacion"] = fecha_creacion
 
+    # Añadimos el expediente solo después de validar todos sus campos.
     expedientes.append(nuevo_expediente)
 
 
@@ -131,3 +142,79 @@ def mostrar_expedientes(expedientes: list[dict[str, Any]]) -> None:
             f"{expediente.get('titulo', 'Sin título')}"
         )
 
+
+def main() -> None:
+    # Cargamos los expedientes al iniciar el programa.
+    try:
+        expedientes = cargar_expedientes(RUTA_DATOS)
+    except FileNotFoundError:
+        print(f"No se encontró el archivo: {RUTA_DATOS}")
+        return
+    except json.JSONDecodeError:
+        print(f"El archivo contiene JSON inválido: {RUTA_DATOS}")
+        return
+
+    # Repetimos el menú hasta que el usuario elija salir.
+    while True:
+        mostrar_menu()
+        opcion = input("Elige una opción: ").strip()
+
+        if opcion == "1":
+            mostrar_expedientes(expedientes)
+
+        elif opcion == "2":
+            expediente_id = input("Introduce el ID del expediente: ").strip()
+            expediente = buscar_por_id(expedientes, expediente_id)
+
+            if expediente is None:
+                print(f"No existe un expediente con el ID {expediente_id}.")
+            else:
+                mostrar_expedientes([expediente])
+
+        elif opcion == "3":
+            campo = input("¿Filtrar por estado o prioridad? ").strip().lower()
+
+            if campo not in {"estado", "prioridad"}:
+                print("El campo debe ser 'estado' o 'prioridad'.")
+                continue
+
+            valor = input(f"Introduce el valor de {campo}: ").strip()
+            resultados = filtrar_expedientes(expedientes, campo, valor)
+            mostrar_expedientes(resultados)
+
+        elif opcion == "4":
+            nuevo_expediente = {
+                "id": input("ID: ").strip(),
+                "titulo": input("Título: ").strip(),
+                "prioridad": input("Prioridad (alta, media o baja): ").strip(),
+                "estado": input(
+                    "Estado (abierto, en_progreso o cerrado): "
+                ).strip(),
+                "solicitante": input("Solicitante: ").strip(),
+                "fecha_creacion": input(
+                    "Fecha de creación (YYYY-MM-DD): "
+                ).strip(),
+            }
+
+            try:
+                crear_expediente(expedientes, nuevo_expediente)
+            except ValueError as error:
+                print(f"No se pudo crear el expediente: {error}")
+            else:
+                try:
+                    guardar_expedientes(RUTA_DATOS, expedientes)
+                except OSError as error:
+                    print(f"No se pudieron guardar los cambios: {error}")
+                else:
+                    print("Expediente creado y guardado.")
+
+        elif opcion == "0":
+            print("Hasta luego.")
+            break
+
+        else:
+            print("Opción no válida. Elige 1, 2, 3, 4 o 0.")
+
+
+if __name__ == "__main__":
+    main()
