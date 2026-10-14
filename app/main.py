@@ -86,3 +86,22 @@ def crear_expediente(
     nuevo_expediente["estado"] = estado
 
     expedientes.append(nuevo_expediente)
+
+
+def cambiar_estado(
+    expedientes: list[dict[str, Any]],
+    expediente_id: str,
+    nuevo_estado: str,
+) -> None:
+    # Normalizamos el estado y comprobamos que sea uno de los permitidos.
+    nuevo_estado = nuevo_estado.strip().lower()
+    if nuevo_estado not in ESTADOS_VALIDOS:
+        raise ValueError("El estado debe ser abierto, en_progreso o cerrado.")
+
+    # Buscamos el expediente y avisamos si el ID no existe.
+    expediente = buscar_por_id(expedientes, expediente_id.strip())
+    if expediente is None:
+        raise ValueError(f"No existe un expediente con el ID {expediente_id}.")
+
+    # Actualizamos el registro encontrado.
+    expediente["estado"] = nuevo_estado
